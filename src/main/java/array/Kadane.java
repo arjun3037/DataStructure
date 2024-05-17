@@ -1,5 +1,6 @@
+package array;
 
-class Solution{
+class Kadane{
 
     // arr: input array
     // n: size of array

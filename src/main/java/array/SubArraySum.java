@@ -1,9 +1,11 @@
+package array;
 
+import java.util.ArrayList;
 
-class Solution
+class SubArraySum
 {
     //Function to find a continuous sub-array which adds up to a given number.
-    static ArrayList<Integer> subarraySum(int[] arr, int n, int s) 
+    static ArrayList<Integer> subarraySum(int[] arr, int n, int s)
     
     {
         ArrayList<Integer> array = new ArrayList<>();
