@@ -1,5 +1,7 @@
 package array.lru;
 
+
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -12,6 +14,8 @@ public class LruCache {
 
     public  LruCache(int capacity){
         this.capacity=capacity;
+        head.setNext(tail);
+        tail.setPrev(head);
     }
 
     Map<Integer , Node> cache = new HashMap<>();
@@ -34,18 +38,16 @@ public class LruCache {
         if (cache.size() == capacity){
             remove(tail.getPrev());
         }
-
         add(new Node(key,value));
-
     }
 
     private void add(Node node) {
         cache.put(node.getKey(), node);
-
-
-
-
-
+        Node headNext = head.getNext();
+        node.setPrev(head);
+        node.setNext(headNext);
+        head.setNext(node);
+        headNext.setPrev(node);
     }
 
     private void remove(Node node){
