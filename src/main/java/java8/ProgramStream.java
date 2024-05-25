@@ -1,9 +1,8 @@
 package java8;
 
-import java.util.Arrays;
+import java.sql.Array;
 import java.util.*;
 import java.util.function.Function;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -12,28 +11,34 @@ public class ProgramStream {
 	
 	
 	public static void main(String args[]){
-		
-		List<Integer> data = Arrays.asList(10,15,8,49,25,98,32,1000,101,98,15);
-		maxElement(data);
 
-		String input = "Java Articles ar awesome";
-		findFirstRepeatedChar(input);
+		ProgramStream programStream = new ProgramStream();
+		List<Student> data = programStream.getData();
 
-		int arr[] = {1,2,3,4};
-		CheckElementExistAtleastTwiceInArray(arr);
+		Integer collect = data.stream().collect(Collectors.summingInt(Student::getSalary));
+		System.out.println(collect);
 
-		List<String> list1 = Arrays.asList("Java", "8");
-		List<String> list2 = Arrays.asList("explained", "through", "programs");
+		Map<Integer, Student> collect1 = data.stream().collect(
+				Collectors.toMap(
+						Student::getSalary, Function.identity(),
+						(oldValue, NewValue) -> {
+							return ((Student)oldValue).address.equals("delhi") ? oldValue : NewValue;
 
-		concatTwoStream(list1,list2);
 
-		List<Integer> integerList = Arrays.asList(4,5,6,7,1,2,3);
-		//cubeOfElement(integerList);
-		sortedAndConvertToArray(arr);
+						}));
 
-		String[] array = {"ss","sa","aa","bb","Ad"};
-		toUpperCase(array);
-		
+		collect1.entrySet().stream().forEach(e -> System.out.println(e.getKey() + "-" + e.getValue().getName()) );
+
+
+		List<String> names = Arrays.asList("AA", "BB", "AA", "CC");
+
+		Map<String, Long> collect2 = names.stream().collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+		collect2.entrySet().stream().forEach(a -> System.out.println(a.getKey() + "-->" + a.getValue()));
+
+		List<String> names1 = Arrays.asList("AA", "BB", "AA", "CC","BB","BB");
+
+		names1.stream().collect(Collectors.groupingBy(Function.identity() , Collectors.counting())).entrySet().stream().filter(a -> a.getValue() >1).forEach(System.out::println);
+
 	}
 
 
@@ -131,8 +136,58 @@ public class ProgramStream {
 			  .map(s-> s.getKey())
 			  .findFirst()
 				.ifPresent(System.out::println);
+	}
+
+	public  List<Student> getData(){
+
+		List<Student> data = new ArrayList<>();
+		data.add(new Student("Arjun","Delhi",100));
+		data.add(new Student("Pooja","Noida",150));
+		data.add(new Student("Ashu","Meerut",200));
+		data.add(new Student("Ashi","Jaipur",125));
+		data.add(new Student("Mishti","Delhi",150));
+		return data;
+
+	}
 
 
+	class Student {
+		String name;
+
+		String address;
+
+		int salary;
+
+		public Student(String name , String address , int salary){
+			this.address=address;
+			this.name=name;
+			this.salary=salary;
+
+		}
+
+		public String getName() {
+			return name;
+		}
+
+		public void setName(String name) {
+			this.name = name;
+		}
+
+		public String getAddress() {
+			return address;
+		}
+
+		public void setAddress(String address) {
+			this.address = address;
+		}
+
+		public int getSalary() {
+			return salary;
+		}
+
+		public void setSalary(int salary) {
+			this.salary = salary;
+		}
 	}
 	
 	
